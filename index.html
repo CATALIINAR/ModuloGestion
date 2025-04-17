@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión Cliente en Mora</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .card, .modulo {
+      border: 1px solid black;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      background-color: #5a5fd1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 20px;
+    }
+    .btn:hover {
+      background-color: #474cb5;
+    }
+    .gestiones {
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="background-color:#5a5fd1; color:white; padding:10px; border-radius:20px; width:200px; text-align:center;">Cliente</h2>
+
+  <div class="card">
+    <p><strong>Nombre:</strong> Juan Pérez &nbsp;&nbsp;&nbsp; <strong>Correo:</strong> juan@example.com &nbsp;&nbsp;&nbsp; <strong>Número:</strong> 3002657867 &nbsp;&nbsp;&nbsp; <strong>Cédula:</strong> 123456789</p>
+  </div>
+
+  <div class="card">
+    <p><strong>Número crédito:</strong> 001 &nbsp;&nbsp;&nbsp; <strong>Tipo de crédito:</strong> Consumo &nbsp;&nbsp;&nbsp; <strong>Saldo en mora:</strong> $500.000 &nbsp;&nbsp;&nbsp; <strong>Días mora:</strong> 90</p>
+  </div>
+
+  <button class="btn" onclick="mostrarModulo()">Agregar gestión</button>
+
+  <div class="gestiones">
+    <h3>Histórico de gestiones</h3>
+    <table id="historial">
+      <thead>
+        <tr>
+          <th>Canal</th>
+          <th>Tipificación</th>
+          <th>Motivo</th>
+          <th>Teléfono</th>
+          <th>Tipo de Acuerdo</th>
+          <th>Fecha de Acuerdo</th>
+          <th>Resultado</th>
+        </tr>
+      </thead>
+      <tbody id="historialBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Módulo de Gestión -->
+  <div id="moduloGestion" class="modulo hidden">
+    <h2 style="background-color:#5a5fd1; color:white; padding:10px; border-radius:20px; text-align:center;">Módulo de Gestión</h2>
+    <p><strong>Estado del crédito:</strong> Judicializado</p>
+
+    <table>
+      <tr>
+        <td><strong>Canal</strong></td>
+        <td>
+          <select id="canal">
+            <option value="llamada">Llamada</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="correo">Correo</option>
+          </select>
+        </td>
+        <td><strong>Tipificación</strong></td>
+        <td>
+          <select id="tipificacion">
+            <option value="no contesta">No contesta</option>
+            <option value="acuerdo de pago">Acuerdo de pago</option>
+            <option value="si acuerdo">Sí acuerdo</option>
+          </select>
+        </td>
+        <td><strong>Motivo Mora</strong></td>
+        <td>
+          <select id="motivo">
+            <option value="olvido de pago">Olvido de pago</option>
+            <option value="no aplica">No aplica</option>
+            <option value="gastos de mas">Gastos de más</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Teléfono</strong></td>
+        <td><input id="telefono" value="3002657867"></td>
+        <td><strong>Tipo Acuerdo</strong></td>
+        <td>
+          <select id="tipoAcuerdo">
+            <option value="abono">Abono</option>
+            <option value="acuerdo de pago">Acuerdo de pago</option>
+            <option value="condonacion">Condonación</option>
+          </select>
+        </td>
+        <td><strong>Fecha Acuerdo</strong></td>
+        <td><input id="fecha" type="date"></td>
+      </tr>
+      <tr>
+        <td colspan="6"><strong>Resultado de gestión</strong><br><textarea id="resultado" rows="2" style="width:100%"></textarea></td>
+      </tr>
+    </table>
+    <br>
+    <button class="btn" onclick="guardarGestion()">Guardar</button>
+  </div>
+
+  <script>
+    const gestiones = [];
+
+    function mostrarModulo() {
+      document.getElementById('moduloGestion').classList.remove('hidden');
+    }
+
+    function guardarGestion() {
+      const nueva = {
+        canal: document.getElementById('canal').value,
+        tipificacion: document.getElementById('tipificacion').value,
+        motivo: document.getElementById('motivo').value,
+        telefono: document.getElementById('telefono').value,
+        tipoAcuerdo: document.getElementById('tipoAcuerdo').value,
+        fecha: document.getElementById('fecha').value,
+        resultado: document.getElementById('resultado').value
+      };
+      gestiones.push(nueva);
+      actualizarHistorial();
+      document.getElementById('moduloGestion').classList.add('hidden');
+    }
+
+    function actualizarHistorial() {
+      const tbody = document.getElementById('historialBody');
+      tbody.innerHTML = '';
+      gestiones.forEach(g => {
+        const fila = `<tr>
+          <td>${g.canal}</td>
+          <td>${g.tipificacion}</td>
+          <td>${g.motivo}</td>
+          <td>${g.telefono}</td>
+          <td>${g.tipoAcuerdo}</td>
+          <td>${g.fecha}</td>
+          <td>${g.resultado}</td>
+        </tr>`;
+        tbody.innerHTML += fila;
+      });
+    }
+  </script>
+</body>
+</html>
